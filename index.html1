@@ -4,18 +4,28 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MoodMate - Feel. Click. Glow.</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
-      background-image: url("6db77d9319abcacda8291f3600980e9f.jpg");
+      background-image: url('https://i.pinimg.com/736x/1b/b0/00/1bb00049c4d9b3e6aab10ee76ef096ad.jpg');
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Inter', sans-serif;
+      color: #f8fafc;
+    }
+
+    .glass {
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(14px);
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
     }
 
     .fade-in {
-      animation: fadeIn 1.5s ease-in-out;
+      animation: fadeIn 1s ease-in-out;
     }
 
     @keyframes fadeIn {
@@ -29,82 +39,36 @@
       }
     }
 
-    .glass {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 20px;
-      padding: 2rem;
-      box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
-    }
-
-    .mood-btn {
-      transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
-    }
-
-    .mood-btn:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 12px rgba(255, 255, 255, 0.7);
-      background-color: rgba(255,255,255,0.2);
-    }
-
+    .mood-btn:hover,
     .active-button {
       outline: 3px solid white;
+      transform: scale(1.05);
+      background-color: rgba(255, 255, 255, 0.1);
     }
 
-    .petal {
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      background: radial-gradient(circle, #ffc0cb 40%, transparent 41%);
-      border-radius: 50%;
-      animation: fall linear infinite;
-    }
-
-    @keyframes fall {
-      0% {
-        transform: translateY(-100px) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(100vh) rotate(360deg);
-        opacity: 0;
-      }
+    h1 {
+      font-family: 'DM Serif Display', serif;
     }
   </style>
 </head>
-<body class="min-h-screen text-white">
-  <div class="fixed inset-0 z-0 overflow-hidden">
-    <!-- Animated Petals -->
-    <script>
-      for (let i = 0; i < 40; i++) {
-        const petal = document.createElement('div');
-        petal.classList.add('petal');
-        petal.style.left = Math.random() * 100 + 'vw';
-        petal.style.animationDuration = 5 + Math.random() * 5 + 's';
-        petal.style.opacity = Math.random();
-        document.body.appendChild(petal);
-      }
-    </script>
+<body class="min-h-screen p-6 flex flex-col items-center justify-center">
+  <div class="glass max-w-2xl w-full text-center fade-in">
+    <h1 class="text-5xl text-yellow-100 mb-4">MoodMate</h1>
+    <p class="text-lg text-slate-200 mb-8">Select your vibe and let your mood shine ✨</p>
+
+    <div class="flex flex-wrap justify-center gap-3 mb-6">
+      <button onclick="showMood('happy', this)" class="mood-btn bg-yellow-400 text-black font-semibold px-6 py-2 rounded-full">Happy</button>
+      <button onclick="showMood('sad', this)" class="mood-btn bg-blue-500 text-white font-semibold px-6 py-2 rounded-full">Sad</button>
+      <button onclick="showMood('focused', this)" class="mood-btn bg-green-500 text-white font-semibold px-6 py-2 rounded-full">Focused</button>
+      <button onclick="showMood('calm', this)" class="mood-btn bg-teal-400 text-black font-semibold px-6 py-2 rounded-full">Calm</button>
+      <button onclick="showMood('angry', this)" class="mood-btn bg-red-600 text-white font-semibold px-6 py-2 rounded-full">Angry</button>
+    </div>
+
+    <div id="moodContent" class="fade-in mt-6 text-center"></div>
   </div>
 
-  <div class="relative z-10 text-center py-16 px-4 fade-in glass mx-auto max-w-4xl mt-10">
-    <h1 class="text-5xl font-bold tracking-tight mb-4 text-yellow-200 drop-shadow">Welcome to <span class="text-pink-300">MoodMate</span></h1>
-    <p class="text-lg text-indigo-100">Select your mood and get curated content made just for you ✨</p>
-  </div>
-
-  <div class="relative z-10 flex flex-wrap justify-center gap-4 px-6 mt-6 fade-in">
-    <button onclick="showMood('happy', this)" class="mood-btn bg-yellow-400 text-black px-6 py-3 rounded-full text-lg font-semibold glass">Happy</button>
-    <button onclick="showMood('sad', this)" class="mood-btn bg-blue-500 px-6 py-3 rounded-full text-lg font-semibold glass">Sad</button>
-    <button onclick="showMood('focused', this)" class="mood-btn bg-green-500 px-6 py-3 rounded-full text-lg font-semibold glass">Focused</button>
-    <button onclick="showMood('calm', this)" class="mood-btn bg-teal-400 px-6 py-3 rounded-full text-lg font-semibold glass">Calm</button>
-    <button onclick="showMood('angry', this)" class="mood-btn bg-red-600 px-6 py-3 rounded-full text-lg font-semibold glass">Angry</button>
-  </div>
-
-  <div id="moodContent" class="relative z-10 mt-10 px-6 fade-in min-h-[300px] text-center"></div>
-
-  <footer class="relative z-10 mt-20 text-center text-sm text-pink-100 drop-shadow">
-    Crafted with cherry-blossom magic by <span class="text-pink-400 font-bold">Sasi 🌸</span>
+  <footer class="mt-10 text-sm text-pink-100 text-center">
+    Crafted with ✨ by <span class="text-pink-400 font-bold">Sasi 🌸</span>
   </footer>
 
   <script>
@@ -139,10 +103,10 @@
     function showMood(mood, btn) {
       const { quote, tip, playlist } = moodData[mood];
       document.getElementById("moodContent").innerHTML = `
-        <div class="fade-in glass mx-auto max-w-2xl">
-          <h2 class="text-3xl font-bold mb-2 text-white">Mood: ${mood.charAt(0).toUpperCase() + mood.slice(1)}</h2>
-          <p class="text-xl italic mb-4">“${quote}”</p>
-          <p class="mb-6 text-indigo-100">💡 ${tip}</p>
+        <div class="glass mt-4">
+          <h2 class="text-2xl font-bold mb-2 text-white">Mood: ${mood.charAt(0).toUpperCase() + mood.slice(1)}</h2>
+          <p class="italic mb-2 text-pink-100">“${quote}”</p>
+          <p class="mb-4 text-sm text-indigo-100">💡 ${tip}</p>
           <iframe src="${playlist}" class="w-full max-w-md mx-auto rounded-lg" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
         </div>
       `;
