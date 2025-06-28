@@ -8,7 +8,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
-      background-image: url('https://i.pinimg.com/736x/1b/b0/00/1bb00049c4d9b3e6aab10ee76ef096ad.jpg');
+      background-image: url("/mnt/data/1a99a8439a81c8dda190ba0547217002.jpg");
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
@@ -17,11 +17,11 @@
     }
 
     .glass {
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(14px);
+      background: rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(10px);
       border-radius: 1rem;
       padding: 2rem;
-      box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
     }
 
     .fade-in {
@@ -68,7 +68,7 @@
   </div>
 
   <footer class="mt-10 text-sm text-pink-100 text-center">
-    Crafted with ✨ by <span class="text-pink-400 font-bold">Sasi 🌸</span>
+    Crafted by <span class="text-pink-400 font-bold">Sasi 🌸</span>
   </footer>
 
   <script>
