@@ -22,6 +22,9 @@
       .glow {
         box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
       }
+      .active-button {
+        outline: 3px solid white;
+      }
     </style>
   </head>
   <body class="bg-gradient-to-br from-purple-700 to-indigo-900 min-h-screen text-white font-sans">
@@ -31,14 +34,14 @@
     </div>
 
     <div class="flex flex-wrap justify-center gap-4 px-6">
-      <button onclick="showMood('happy')" class="bg-yellow-400 text-black px-6 py-3 rounded-full text-lg font-semibold hover:scale-105 transform transition-all duration-300 glow">Happy</button>
-      <button onclick="showMood('sad')" class="bg-blue-500 px-6 py-3 rounded-full text-lg font-semibold hover:scale-105 transform transition-all duration-300 glow">Sad</button>
-      <button onclick="showMood('focused')" class="bg-green-500 px-6 py-3 rounded-full text-lg font-semibold hover:scale-105 transform transition-all duration-300 glow">Focused</button>
-      <button onclick="showMood('calm')" class="bg-teal-400 px-6 py-3 rounded-full text-lg font-semibold hover:scale-105 transform transition-all duration-300 glow">Calm</button>
-      <button onclick="showMood('angry')" class="bg-red-600 px-6 py-3 rounded-full text-lg font-semibold hover:scale-105 transform transition-all duration-300 glow">Angry</button>
+      <button onclick="showMood('happy', this)" class="mood-btn bg-yellow-400 text-black px-6 py-3 rounded-full text-lg font-semibold hover:scale-105 transform transition-all duration-300 glow" aria-label="Happy mood">Happy</button>
+      <button onclick="showMood('sad', this)" class="mood-btn bg-blue-500 px-6 py-3 rounded-full text-lg font-semibold hover:scale-105 transform transition-all duration-300 glow" aria-label="Sad mood">Sad</button>
+      <button onclick="showMood('focused', this)" class="mood-btn bg-green-500 px-6 py-3 rounded-full text-lg font-semibold hover:scale-105 transform transition-all duration-300 glow" aria-label="Focused mood">Focused</button>
+      <button onclick="showMood('calm', this)" class="mood-btn bg-teal-400 px-6 py-3 rounded-full text-lg font-semibold hover:scale-105 transform transition-all duration-300 glow" aria-label="Calm mood">Calm</button>
+      <button onclick="showMood('angry', this)" class="mood-btn bg-red-600 px-6 py-3 rounded-full text-lg font-semibold hover:scale-105 transform transition-all duration-300 glow" aria-label="Angry mood">Angry</button>
     </div>
 
-    <div id="moodContent" class="mt-10 px-6 text-center fade-in"></div>
+    <div id="moodContent" class="mt-10 px-6 text-center fade-in min-h-[250px]" role="region" aria-live="polite"></div>
 
     <footer class="mt-20 text-center text-sm text-indigo-300">
       Crafted with fire and finesse by <span class="text-pink-400 font-bold">Sasi 💥</span>
@@ -73,16 +76,19 @@
         }
       };
 
-      function showMood(mood) {
+      function showMood(mood, btn) {
         const { quote, tip, playlist } = moodData[mood];
         document.getElementById("moodContent").innerHTML = `
           <div class="fade-in">
             <h2 class="text-3xl font-bold mb-2">Mood: ${mood.charAt(0).toUpperCase() + mood.slice(1)}</h2>
             <p class="text-xl italic mb-4">“${quote}”</p>
             <p class="mb-6 text-indigo-100">💡 ${tip}</p>
-            <iframe src="${playlist}" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media" class="mx-auto rounded-lg"></iframe>
+            <iframe src="${playlist}" class="w-full max-w-md mx-auto rounded-lg" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
           </div>
         `;
+
+        document.querySelectorAll('.mood-btn').forEach(button => button.classList.remove('active-button'));
+        btn.classList.add('active-button');
       }
     </script>
   </body>
