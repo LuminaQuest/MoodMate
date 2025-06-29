@@ -2,101 +2,165 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MoodMate</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MoodMate Journal</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
-      background-image: url("https://i.pinimg.com/736x/1a/99/a8/1a99a8439a81c8dda190ba0547217002.jpg");
+      background: url("https://i.pinimg.com/736x/2b/b1/46/2bb146f811030e9a91b6654ac23101d1.jpg") no-repeat center center fixed;
       background-size: cover;
-      background-repeat: no-repeat;
-      background-position: center;
-      background-attachment: fixed;
       font-family: 'Segoe UI', sans-serif;
-      color: white;
     }
-
     .glass {
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(12px);
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(14px);
       border-radius: 1rem;
-      padding: 2rem;
-      box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 0 25px rgba(0,0,0,0.2);
     }
-
-    .mood-btn:hover,
     .active-button {
       outline: 2px solid white;
       transform: scale(1.05);
       background-color: rgba(255, 255, 255, 0.1);
     }
+    .emoji-picker span {
+      cursor: pointer;
+      font-size: 24px;
+    }
+    .pinterest-gallery img {
+      width: 90px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .pinterest-gallery img:hover {
+      transform: scale(1.05);
+    }
   </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-6">
-
-  <div class="glass text-center max-w-2xl w-full">
-    <h1 class="text-5xl font-bold mb-4 text-yellow-200">MoodMate</h1>
-    <p class="text-lg mb-6 text-indigo-100">Select your vibe and let your mood shine ✨</p>
-
-    <div class="flex flex-wrap justify-center gap-3 mb-6">
-      <button onclick="showMood('happy', this)" class="mood-btn bg-yellow-400 text-black font-semibold px-6 py-2 rounded-full">Happy</button>
-      <button onclick="showMood('sad', this)" class="mood-btn bg-blue-500 text-white font-semibold px-6 py-2 rounded-full">Sad</button>
-      <button onclick="showMood('focused', this)" class="mood-btn bg-green-500 text-white font-semibold px-6 py-2 rounded-full">Focused</button>
-      <button onclick="showMood('calm', this)" class="mood-btn bg-teal-400 text-black font-semibold px-6 py-2 rounded-full">Calm</button>
-      <button onclick="showMood('angry', this)" class="mood-btn bg-red-600 text-white font-semibold px-6 py-2 rounded-full">Angry</button>
+<body class="min-h-screen text-white px-6 py-10">
+  <div class="flex justify-between items-start gap-10">
+    <!-- Emoji Sidebar -->
+    <div class="glass w-[190px] p-2 h-[300px] flex flex-col justify-center">
+      <h2 class="text-md font-semibold mb-2 text-center">Emojis</h2>
+      <div class="grid grid-cols-3 gap-2 emoji-picker justify-items-center">
+        <span onclick="addEmoji('😊')">😊</span>
+        <span onclick="addEmoji('😢')">😢</span>
+        <span onclick="addEmoji('🎯')">🎯</span>
+        <span onclick="addEmoji('🌊')">🌊</span>
+        <span onclick="addEmoji('😡')">😡</span>
+        <span onclick="addEmoji('🌸')">🌸</span>
+        <span onclick="addEmoji('✨')">✨</span>
+        <span onclick="addEmoji('🧘')">🧘</span>
+        <span onclick="addEmoji('🔥')">🔥</span>
+      </div>
     </div>
 
-    <div id="moodContent" class="mt-6"></div>
+    <!-- Main Journal Layout -->
+    <div class="glass w-[500px] p-6">
+      <h1 class="text-3xl text-center font-bold text-pink-300 mb-4">MoodMate Journal</h1>
+      <p class="text-center text-base mb-4">Express yourself and revisit your feelings whenever you need to 💖</p>
+
+      <div class="flex justify-center gap-3 mb-3">
+        <button onclick="selectMood('Happy', event)" class="bg-yellow-400 text-black px-4 py-2 rounded-full mood-btn">Happy</button>
+        <button onclick="selectMood('Sad', event)" class="bg-blue-500 px-4 py-2 rounded-full mood-btn">Sad</button>
+        <button onclick="selectMood('Focused', event)" class="bg-green-500 px-4 py-2 rounded-full mood-btn">Focused</button>
+        <button onclick="selectMood('Calm', event)" class="bg-teal-400 px-4 py-2 rounded-full mood-btn">Calm</button>
+        <button onclick="selectMood('Angry', event)" class="bg-red-500 px-4 py-2 rounded-full mood-btn">Angry</button>
+      </div>
+
+      <div id="currentMoodDisplay" class="text-center text-lg mb-2 font-semibold"></div>
+
+      <textarea id="journalInput" class="w-full h-28 text-black p-4 rounded-lg mb-3" placeholder="Write your thoughts here..."></textarea>
+
+      <div class="flex justify-center gap-4 mb-4">
+        <button onclick="saveEntry()" class="bg-pink-500 px-4 py-2 rounded-full">💾 Save</button>
+        <button onclick="toggleView()" class="bg-indigo-500 px-4 py-2 rounded-full">📖 View Entries</button>
+      </div>
+
+      <div class="text-center mb-4">
+        <iframe id="moodPlayer" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1DX4WYpdgoIcn6" width="100%" height="80" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+      </div>
+
+      <div id="entriesContainer" class="space-y-2 hidden"></div>
+    </div>
+
+    <!-- Pinterest Style Gallery -->
+    <div class="glass w-[260px] p-3 h-[300px] overflow-y-auto">
+      <h2 class="text-md font-semibold mb-2 text-center">Inspo Board</h2>
+      <div class="grid grid-cols-2 gap-2 pinterest-gallery justify-items-center">
+        <img src="https://i.pinimg.com/736x/cc/9e/03/cc9e03125a191f36fb582964cc6d9dcd.jpg" onclick="selectBackground(this.src)">
+        <img src="https://i.pinimg.com/736x/94/33/cb/9433cb8b3db41e00be62ce1ef02c0402.jpg" onclick="selectBackground(this.src)">
+        <img src="https://i.pinimg.com/736x/95/76/b4/9576b4a22a7b78d3b7b6bbc38a25820a.jpg" onclick="selectBackground(this.src)">
+        <img src="https://i.pinimg.com/736x/3b/0a/a5/3b0aa56e8fef7cd8566995b8249c4251.jpg" onclick="selectBackground(this.src)">
+      </div>
+    </div>
   </div>
 
-  <footer class="mt-10 text-sm text-pink-100 text-center">
-    Crafted by <span class="text-pink-400 font-bold">Sasi 🌸</span>
-  </footer>
-
   <script>
-    const moodData = {
-      happy: {
-        quote: "Happiness is not out there, it’s in you.",
-        tip: "Spread the vibe. Compliment someone today!",
-        playlist:"https://open.spotify.com/embed/playlist/6FrBYANMlV06qnWLoGZVy5"
-      },
-      sad: {
-        quote: "Crying doesn’t mean you’re weak. Sometimes it’s how we heal.",
-        tip: "Write down what you're feeling. Let it out.",
-        playlist: "https://open.spotify.com/embed/playlist/37i9dQZF1DWVrtsSlLKzro"
-      },
-      focused: {
-        quote: "One task at a time. Full power. No distractions.",
-        tip: "Set a 25-min timer and go all in.",
-        playlist: "https://open.spotify.com/embed/playlist/37i9dQZF1DX8Uebhn9wzrS"
-      },
-      calm: {
-        quote: "Stillness is where creativity begins.",
-        tip: "Light a candle, take deep breaths, and just be.",
-        playlist: "https://open.spotify.com/embed/playlist/37i9dQZF1DWZqd5JICZI0u"
-      },
-      angry: {
-        quote: "Breathe through it. Don’t let it own you.",
-        tip: "Punch a pillow, scream in a room, then go walk it off.",
-        playlist: "https://open.spotify.com/embed/playlist/37i9dQZF1DWYxwmBaMqxsl"
-      }
-    };
+    let currentMood = '';
 
-    function showMood(mood, btn) {
-      const { quote, tip, playlist } = moodData[mood];
-      document.getElementById("moodContent").innerHTML = `
-        <div class="glass mt-4">
-          <h2 class="text-2xl font-bold mb-2">Mood: ${mood.charAt(0).toUpperCase() + mood.slice(1)}</h2>
-          <p class="italic mb-2 text-pink-100">“${quote}”</p>
-          <p class="mb-4 text-sm text-indigo-100">💡 ${tip}</p>
-          <iframe src="${playlist}" class="w-full max-w-md mx-auto rounded-lg" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-        </div>
-      `;
+    function addEmoji(emoji) {
+      const input = document.getElementById("journalInput");
+      input.value += emoji;
+    }
 
-      document.querySelectorAll('.mood-btn').forEach(button => button.classList.remove('active-button'));
-      btn.classList.add('active-button');
+    function selectMood(mood, event) {
+      currentMood = mood;
+      document.querySelectorAll(".mood-btn").forEach(btn => btn.classList.remove("active-button"));
+      event.target.classList.add("active-button");
+      document.getElementById("currentMoodDisplay").innerText = `Current Mood: ${mood}`;
+
+      const spotifyLinks = {
+        Happy: "https://open.spotify.com/embed/playlist/37i9dQZF1DXdPec7aLTmlC",
+        Sad: "https://open.spotify.com/embed/playlist/37i9dQZF1DWVrtsSlLKzro",
+        Focused: "https://open.spotify.com/embed/playlist/37i9dQZF1DX8Uebhn9wzrS",
+        Calm: "https://open.spotify.com/embed/playlist/37i9dQZF1DX3rxVfibe1L0",
+        Angry: "https://open.spotify.com/embed/playlist/37i9dQZF1DWYp5sAHdz27Y",
+      };
+
+      document.getElementById("moodPlayer").src = spotifyLinks[mood];
+    }
+
+    function selectBackground(src) {
+      document.body.style.background = `url('${src}') no-repeat center center fixed`;
+      document.body.style.backgroundSize = 'cover';
+    }
+
+    function saveEntry() {
+      const text = document.getElementById("journalInput").value;
+      if (!text.trim()) return alert("Please write something.");
+      const entry = { mood: currentMood, text, timestamp: new Date().toLocaleString() };
+      const existing = JSON.parse(localStorage.getItem("journalEntries") || "[]");
+      existing.push(entry);
+      localStorage.setItem("journalEntries", JSON.stringify(existing));
+      document.getElementById("journalInput").value = "";
+      alert("Entry saved!");
+    }
+
+    function toggleView() {
+      const container = document.getElementById("entriesContainer");
+      container.classList.toggle("hidden");
+      container.innerHTML = "";
+      const entries = JSON.parse(localStorage.getItem("journalEntries") || "[]");
+      entries.reverse().forEach((entry, idx) => {
+        container.innerHTML += `
+          <div class="glass p-3 text-black bg-white/20">
+            <p class="text-sm"><strong>${entry.mood}</strong> - <em>${entry.timestamp}</em></p>
+            <p class="my-2">${entry.text}</p>
+            <button onclick="deleteEntry(${entries.length - 1 - idx})" class="text-red-500 text-sm">🗑 Delete</button>
+          </div>
+        `;
+      });
+    }
+
+    function deleteEntry(index) {
+      let entries = JSON.parse(localStorage.getItem("journalEntries") || "[]");
+      entries.splice(index, 1);
+      localStorage.setItem("journalEntries", JSON.stringify(entries));
+      toggleView();
     }
   </script>
-
 </body>
 </html>
